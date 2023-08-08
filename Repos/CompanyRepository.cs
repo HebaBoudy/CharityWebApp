@@ -13,8 +13,6 @@ namespace WebAppTutorial.Repos
             _context = Context;
         }
 
-      
-
         bool ICompanyRepository.CompanyExists(int id)
         {
             return _context.Company.Any(e => e.CompanyId==id);

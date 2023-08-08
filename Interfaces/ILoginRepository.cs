@@ -5,9 +5,9 @@ namespace WebAppTutorial.Interfaces
     public interface ILoginRepository
     {
         ICollection<Login> GetLogins();
-        bool UserNameExists(string Name);
-
-         bool PasswordExists(string password);
+        Login GetLogin(string  UserName,string Password);
+        bool UserExists(string Name,string password);
+      
        
 
     }

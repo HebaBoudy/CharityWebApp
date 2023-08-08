@@ -7,14 +7,15 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace WebAppTutorial.Controllers
 {
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class LoginController 
+    public class LoginController : Controller
     {
         private readonly ILoginRepository _LoginRepos;
-        public LoginController(ILoginRepository LoginRepos )
+
+        public LoginController(ILoginRepository LoginRepos)
         {
-            _LoginRepos = LoginRepos;   
+            _LoginRepos = LoginRepos;
 
         }
         [HttpGet]
@@ -22,13 +23,23 @@ namespace WebAppTutorial.Controllers
         public IActionResult GetLogins()
         {
             var Login = _LoginRepos.GetLogins();
-         
+
+            if (!ModelState.IsValid)
+                return BadRequest(Login);
             return Ok(Login);
         }
-
-        private IActionResult Ok(ICollection<Login> login)
+        [HttpGet("{UserName,password}")]
+        [ProducesResponseType(200,Type=typeof ( Login))]
+        public IActionResult GetLogin(string username,string pass )
         {
-            throw new NotImplementedException();
+            if (!_LoginRepos.UserExists(username, pass))
+                return NotFound();
+            var login = _LoginRepos.GetLogin(username,pass);
+            if(!ModelState.IsValid)
+                return BadRequest(login);   
+            return Ok(login);
         }
+
+
     }
 }

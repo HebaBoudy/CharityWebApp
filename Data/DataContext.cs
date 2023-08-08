@@ -18,8 +18,8 @@ namespace WebAppTutorial.Data
 
             ModelBuilder.Entity<Company>().HasData(new Company { CompanyId = 1, Name = "DummyName1", TotalRaisedAmount = 1, type = "DummyType1" });
             ModelBuilder.Entity<Company>().HasData(new Company { CompanyId = 2, Name = "DummyName2", TotalRaisedAmount = 1, type = "DummyType2" });
-            ModelBuilder.Entity<Login>().HasData(new Login { LoginId = 1, UserName = "UserName1", Password = "Password1" });
-            ModelBuilder.Entity<Login>().HasData(new Login { LoginId = 2, UserName = "UserName2", Password = "Password2" });
+            ModelBuilder.Entity<Login>().HasData(new Login { Id = 1, UserName = "UserName1", Password = "Password1" });
+            ModelBuilder.Entity<Login>().HasData(new Login {Id = 2, UserName = "UserName2", Password = "Password2" });
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder options)
         //{

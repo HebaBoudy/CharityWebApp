@@ -6,7 +6,11 @@ namespace WebAppTutorial.Interfaces
     {
         ICollection<Login> GetLogins();
         Login GetLogin(string  UserName,string Password);
+        Login GetLogin(string UserName);
         bool UserExists(string Name,string password);
+        bool UserExists(string userName);
+        bool CreateLogin( Login newlogin);
+        bool DeleteUser(Login login);
       
        
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebAppTutorial.Data;
 using WebAppTutorial.Interfaces;
+using WebAppTutorial.Models;
 using WebAppTutorial.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IUsersRegistration, UsersRegistrationRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());/*? */
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -57,7 +57,7 @@ namespace WebAppTutorial.Controllers
                 ModelState.AddModelError("", " Company  already exists ");
                 return StatusCode(422);
             }
-            if(!ModelState.IsValid)
+            if(!ModelState.IsValid)             
               return BadRequest(ModelState);
             if (!_CompanyRepository.AddCompany(company))
                 ModelState.AddModelError("", " Something went wrong on adding ");

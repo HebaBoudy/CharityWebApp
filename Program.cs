@@ -15,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUsersRegistration, UsersRegistrationRepository>();
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<IDonor_CampaignRepository, Donor_CampaignRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());/*? */
 builder.Services.AddDbContext<DataContext>(options =>
 {

@@ -13,7 +13,9 @@ namespace WebAppTutorial.DTO.Helper
             CreateMap<LoginDto, Login>();
             CreateMap<UsersRegistrationDto, UsersRegistration>();
             CreateMap<UsersRegistration, UsersRegistrationDto>();
-       
+            CreateMap<Campaign, CampaignDto>();
+            CreateMap<CampaignDto, Campaign>();
+
 
 
 

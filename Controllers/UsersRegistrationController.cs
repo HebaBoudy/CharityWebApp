@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 using System.ComponentModel.DataAnnotations;
 using WebAppTutorial.DTO;
 using WebAppTutorial.Interfaces;
@@ -55,51 +56,52 @@ namespace WebAppTutorial.Controllers
 
 
         [HttpPost]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateNewUser( [FromQuery]  string password,[FromBody] UsersRegistration user)
+        [ProducesResponseType(200,Type=typeof(SignUpResponse))]
+        
+        public IActionResult CreateNewUser( [FromBody] UsersRegistration user)
         {
+            SignUpResponse response = new SignUpResponse();
           
-            var emailValidation = new EmailAddressAttribute();
-            var isValid = emailValidation.IsValid(user.Email);
-            if (!isValid)
-            {
-
-                ModelState.AddModelError("", " Incorrect email format ");
-                return BadRequest();
-            }
+           
             if (_UsersRepo.UserExistsEmail(user.Email))
             {
-                ModelState.AddModelError("", "This email is already signed in ");
-                return StatusCode(422);
-
+                response.Message = "This email is already signed in";
+                response.StatusCode = 422;
+                response.IsSignedIn = false;
+                return Ok(response);
             }
 
             if(_LoginRepos.UserExists(user.UserName))
             {
-                ModelState.AddModelError("", "This userName is taken , try another one  ");
-                return StatusCode(422);
-
+                response.Message = " username exists , try another one ";
+                response.StatusCode = 422;
+                response.IsSignedIn = false;
+                return Ok(response);
             }
 
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-          
-            if (!_UsersRepo.AddUser(user))
-                ModelState.AddModelError("", " Something went wrong on adding ");
-
+            {
+                response.Message = " Something went wrong ";
+                response.StatusCode = 404;
+                response.IsSignedIn = false;
+                return Ok(response);
+            }
             Login newLogin = new Login()
             {
                 UserName = user.UserName,
-                Password = password,
+                Password = user.Password,
                 Type = true,
                 Company = null,
                 UserRegistration = user
             };
-            if (!_LoginRepos.CreateLogin(newLogin))
-                return BadRequest();
+            if (!_UsersRepo.AddUser(user)|| !_LoginRepos.CreateLogin(newLogin))
+                ModelState.AddModelError("", " Something went wrong on adding ");
 
-            return Ok("Added successfully");
+            response.Message = " Successful ";
+            response.StatusCode = 200;
+            response.IsSignedIn = true;
+
+            return Ok(response);
         }
 
 

@@ -6,6 +6,8 @@ using WebAppTutorial.Interfaces;
 using WebAppTutorial.Models;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using WebAppTutorial.DTO;
+using Shared.Models;
+
 namespace WebAppTutorial.Controllers
 {
     [Route("api/[controller]")]
@@ -33,7 +35,8 @@ namespace WebAppTutorial.Controllers
                 return BadRequest(Login);
             return Ok(Login);
         }
-        [HttpGet("{UserName,password}")]
+        
+        [HttpGet("login/{username}/{pass}")]
         [ProducesResponseType(200,Type=typeof ( LoginDto))]
         public IActionResult GetLogin(string username,string pass )
         {
@@ -45,6 +48,29 @@ namespace WebAppTutorial.Controllers
                 return BadRequest(login);   
             return Ok(login);
         }
-       
+       [HttpPost]
+       public IActionResult Authentication([FromQuery]string username, [FromQuery] string pass)
+        {
+            LoginResponse response = new LoginResponse();
+           
+            if (!_LoginRepos.UserExists(username, pass))
+            {
+                response.IsLoggedIn = false;
+                response.Message = "Incorrect UserName or password";
+                response.Type = null;
+                return Ok(response);
+            }
+
+            var login =_LoginRepos.GetLogin(username, pass);
+            if (!ModelState.IsValid)
+                return BadRequest(login);/*da sah wala mayenf3ash araga3 kza return type*/
+
+            response.IsLoggedIn = true;
+            response.Message = " Logged In Sucessfully ";
+            response.Type = login.Type;
+            return Ok(response);
+        
+        }
+
     }
 }

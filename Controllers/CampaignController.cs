@@ -36,20 +36,29 @@ namespace WebAppTutorial.Controllers
             return Ok(campaigns);
         }
         [HttpPost]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateNewCampaign([FromBody] CampaignDto newCampaign)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+
+        public IActionResult CreateNewCampaign([FromBody] FrontEndCampaign FrontCampaign)
         {
-            Campaign campaign= _Mapper.Map<Campaign>(newCampaign);
-            campaign.Company = _CompanyRepo.GetCompanyById(newCampaign.CompanyID);
-
-           if( _CampaignRepo.CampaignExists(campaign))
-            {
-                ModelState.AddModelError("", " This title already exists for the same company , try another name  ");
+            if (FrontCampaign == null)
                 return BadRequest();
-
-            }
-            if(!_CampaignRepo.CreateCampain(campaign))
+            //Campaign campaign= _Mapper.Map<Campaign>(newCampaign);
+           
+            Company company = _CompanyRepo.GetCompanyByUserName(FrontCampaign.UserName);
+            if (company == null)
+                return BadRequest();
+            Campaign newCampaign = new Campaign()
+            {
+                Company = company,
+                CompanyID = company.ID,
+                Title = FrontCampaign.Title,
+                RequiredAmount = FrontCampaign.RequiredAmount,
+                CollectedAmount = 0,
+                Description = FrontCampaign.Description,
+            };
+            
+            if(!_CampaignRepo.CreateCampain(newCampaign))
             {
                 ModelState.AddModelError("", " Something went wrong on adding ");
                 return BadRequest();

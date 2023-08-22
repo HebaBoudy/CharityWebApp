@@ -4,6 +4,8 @@ using WebAppTutorial.Interfaces;
 using WebAppTutorial.Models;
 using WebAppTutorial.DTO;
 using WebAppTutorial.Repos;
+using Shared.Models;
+using System.ComponentModel.Design;
 
 namespace WebAppTutorial.Controllers
 {
@@ -24,13 +26,14 @@ namespace WebAppTutorial.Controllers
             _Donor_CampaignRepos=Donor_CampaignRepos;   
         }
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(CampaignDto))]
-        public IActionResult GetAllCampaigns([FromQuery]int Companyid)
+        [ProducesResponseType(200, Type = typeof(Campaign))]
+        public IActionResult GetAllCampaigns([FromQuery] string userName)
         {
-           var campaigns= _Mapper.Map<List<CampaignDto>>(_CampaignRepo.GetAllCampaigns(Companyid));
-           CompanyDto company= _Mapper.Map<CompanyDto>(_CompanyRepo.GetCompanyById(Companyid));    
+          
+            Company company =_CompanyRepo.GetCompanyByUserName(userName);
+            var campaigns =_CampaignRepo.GetAllCampaigns(company.ID);
 
-            if (company==null)
+            if (company == null)
                 return NotFound();
 
             return Ok(campaigns);
@@ -90,8 +93,8 @@ namespace WebAppTutorial.Controllers
             return Ok("Updated successfully ");
             
         }
-        [Route("Delete/{title}")]
-        [HttpDelete]
+        [Route("Get/{Title}")]
+        [HttpGet]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -116,6 +119,15 @@ namespace WebAppTutorial.Controllers
 
 
         }
+        //[HttpGet]
+        //[ProducesResponseType(200, Type = typeof(List<Campaign>))]
+        //public IActionResult GetAll()
+        //{
+        //    var campaigns = _CampaignRepo.GetAll();
+
+
+        //    return Ok(campaigns);
+        //}
 
     }
 }

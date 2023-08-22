@@ -1,4 +1,5 @@
-﻿namespace WebAppTutorial.Models
+﻿using Shared.Models;
+namespace WebAppTutorial.Models
 {
     public class Donor_Campaign/*Many To many Rel*/
     {

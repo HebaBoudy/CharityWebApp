@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using WebAppTutorial.Models;
-
+using Shared.Models;
 namespace WebAppTutorial.DTO.Helper
 {
     public class MappingProfiles : Profile

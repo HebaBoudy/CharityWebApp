@@ -2,7 +2,9 @@
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using WebAppTutorial.Models;
+
 using System.ComponentModel.DataAnnotations;
+using Shared.Models;
 namespace WebAppTutorial.Data
 {
     public class DataContext : DbContext

@@ -3,7 +3,7 @@ using WebAppTutorial.Data;
 using WebAppTutorial.Interfaces;
 using WebAppTutorial.Models;
 using WebAppTutorial.Repos;
-
+using Shared.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

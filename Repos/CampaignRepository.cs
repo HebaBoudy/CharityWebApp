@@ -1,6 +1,7 @@
 ﻿using WebAppTutorial.Interfaces;
 using WebAppTutorial.Models;
 using WebAppTutorial.Data;
+using Shared.Models;
 namespace WebAppTutorial.Repos
 {
     public class CampaignRepository : ICampaignRepository
@@ -32,10 +33,17 @@ namespace WebAppTutorial.Repos
             return (deleted > 0) ? true : false;
         }
 
+        public ICollection<Campaign> GetAll()
+        {
+           return  _dataContext.Campaign.ToList();
+        }
+
         public ICollection<Campaign> GetAllCampaigns(int id)
         {
             return _dataContext.Campaign.Where(e => e.CompanyID == id).ToList();
         }
+
+      
 
         public Campaign GetCampaignByName(string name)
         {

@@ -13,9 +13,9 @@ namespace WebAppTutorial.Repos
             _dataContext = dataContext;
         }
 
-        public bool CampaignExists(Campaign campaign)
+        public bool CampaignExists(string title)
         {
-          return _dataContext.Campaign.Any(e=>e.Title==campaign.Title&&e.CompanyID==campaign.CompanyID);
+          return _dataContext.Campaign.Any(e=>e.Title==title);
         }
 
         public bool CreateCampain(Campaign campaign)

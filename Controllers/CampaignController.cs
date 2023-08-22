@@ -73,25 +73,35 @@ namespace WebAppTutorial.Controllers
             return Ok("Added successfully ");
 
         }
-        [HttpPut]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult UpdateCampaign([FromQuery] string Name,CampaignDto campaign)
+        // [Route("Delete/{username}")]
+        [Route("Update")]
+        [HttpPost]
+       [ProducesResponseType(200,Type=typeof(UpdateCampaignResponse))]
+        public IActionResult UpdateCampaign([FromBody]FrontEndCampaign campaign, [FromQuery] string Oldtitle)
         {
-            if (campaign == null)
-                return BadRequest(ModelState);
-            if (Name != campaign.Title)
-                return BadRequest(ModelState);
-          Campaign c=  _Mapper.Map<Campaign>(campaign);
-            if (!_CampaignRepo.UpdateCampaign(c))
-                return NotFound();
+            UpdateCampaignResponse response=new UpdateCampaignResponse();    
+            if (!_CampaignRepo.CampaignExists(Oldtitle))
+            {
+                response.message = "This Campaign doesn't exist";
+                response.statusCode = 200;
+                return Ok(response);
+            }
+            Campaign GetCampaign = _CampaignRepo.GetCampaignByName(Oldtitle);
+             GetCampaign.RequiredAmount=campaign.RequiredAmount;
+             GetCampaign.Description=campaign.Description;   
+             GetCampaign.Title=campaign.Title; 
+            
+            if (!_CampaignRepo.UpdateCampaign(GetCampaign))
+            {
+                response.message = "Something went wrong on updated";
+                response.statusCode = 200;
+                return Ok(response);
+            }
             if (!ModelState.IsValid)
                 return BadRequest();
-            if (c.CollectedAmount == c.RequiredAmount)
-                c.Active = false;
-            return Ok("Updated successfully ");
-            
+            response.message = "Updated Successfully";
+            response.statusCode = 200;
+            return Ok(response);
         }
         [Route("Get/{Title}")]
         [HttpGet]

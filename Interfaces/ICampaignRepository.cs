@@ -10,7 +10,7 @@ namespace WebAppTutorial.Interfaces
         Campaign GetCampaignByName(string name);
         bool UpdateCampaign(Campaign campaign);
         bool DeleteCampaign(Campaign campaign);
-        bool  CampaignExists(Campaign campaign); 
+        bool  CampaignExists(string title); 
 
 
     }

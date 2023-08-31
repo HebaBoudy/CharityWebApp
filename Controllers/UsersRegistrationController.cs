@@ -37,11 +37,11 @@ namespace WebAppTutorial.Controllers
                 return BadRequest(Users);
             return Ok(Users);
         }
-
-
-        [HttpGet("{UserName}")]
+       
+        [Route("{UserName}")]
+        [HttpGet]
         [ProducesResponseType(200, Type = typeof(UsersRegistration))]
-        public IActionResult GetUserByUserName([FromQuery] string UserName)
+        public IActionResult GetUserByUserName(string UserName)
         {
             if (!_UsersRepo.UserNameExists(UserName))
                 return NotFound();
@@ -52,8 +52,6 @@ namespace WebAppTutorial.Controllers
 
             return Ok(user);
         }
-
-
 
         [HttpPost]
         [ProducesResponseType(200,Type=typeof(SignUpResponse))]
@@ -104,43 +102,34 @@ namespace WebAppTutorial.Controllers
             return Ok(response);
         }
 
-
-
-        [HttpPut]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult UpdateUserInfo([FromQuery] string oldUserName, [FromBody] UsersRegistration user)
-        {
-            Login login = _LoginRepos.GetLogin(oldUserName);
-
-            if (user == null)
-                return BadRequest(ModelState);
-            var emailValidation = new EmailAddressAttribute();
-            var isValid = emailValidation.IsValid(user.Email);
-            if (!isValid)
+        [Route("UpdateProfile")]
+        [HttpPost]
+        [ProducesResponseType(200,Type=typeof(SignUpResponse))]
+        public IActionResult UpdateUserInfo( [FromQuery] string oldUserName,[FromBody] UsersRegistration user)
+        {       /*hena*/
+             Login login=_LoginRepos.GetLogin(oldUserName);
+            if(login!=null)
             {
-
-                ModelState.AddModelError("", " Incorrect email format ");
-                return BadRequest();
+                login.UserName = user.UserName;
+                _LoginRepos.UpdateUser(login);
             }
-            if (!_UsersRepo.UserExistsID(user.ID))
-                return NotFound();
-
-            if (!_UsersRepo.UpdateUserInfo(user))
+            SignUpResponse signUpResponse = new SignUpResponse();   
+            UsersRegistration oldUser = _UsersRepo.GetUserByUserName(oldUserName);
+            oldUser.FName = user.FName;
+            oldUser.LName = user.LName;
+            oldUser.UserName = user.UserName;
+            oldUser.Email = user.Email;
+            oldUser.PhoneNo = user.PhoneNo; 
+            oldUser.Password = user.Password;
+            if (!_UsersRepo.UpdateUserInfo(oldUserName, oldUser) || !ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Something went wrong ");
-                return BadRequest();
-
+                signUpResponse.Message = "Something went Wrong";
+                signUpResponse.StatusCode = 200;
+                return Ok(signUpResponse);
             }
-            if (!ModelState.IsValid)
-                return BadRequest();
-         
-                login.UserName=user.UserName;
-            login.UserRegistration = user;
-           
-               
-            return Ok("Updated successfully ");
+            signUpResponse.Message = "Updated Successfully";
+            signUpResponse.StatusCode = 200;
+            return Ok(signUpResponse);
 
         }
 
@@ -177,6 +166,8 @@ namespace WebAppTutorial.Controllers
 
 
         }
+       
+
 
     }
 }

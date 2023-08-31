@@ -12,8 +12,9 @@ namespace WebAppTutorial.Interfaces
           bool UserNameExists(string username);   
           ICollection<UsersRegistration> GetAll();
           bool AddUser(UsersRegistration user);
-          bool UpdateUserInfo(UsersRegistration user);
+          bool UpdateUserInfo(string oldUser,UsersRegistration user);
           bool DeleteUser(UsersRegistration user);
+      
 
     }
 }

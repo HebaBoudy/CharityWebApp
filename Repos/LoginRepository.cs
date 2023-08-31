@@ -58,5 +58,12 @@ namespace WebAppTutorial.Repos
             return (saved > 0) ? true : false;
 
         }
+
+        public bool UpdateUser(Login login)
+        {
+            _context.Login.Update(login);
+            var saved = _context.SaveChanges();
+            return (saved > 0) ? true : false;
+        }
     }
 };

@@ -11,7 +11,7 @@ namespace WebAppTutorial.Interfaces
         bool UserExists(string userName);
         bool CreateLogin( Login newlogin);
         bool DeleteUser(Login login);
-      
+      bool UpdateUser(Login login); 
        
 
     }

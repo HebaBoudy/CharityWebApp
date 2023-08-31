@@ -33,9 +33,9 @@ namespace WebAppTutorial.Repos
             return (deleted > 0) ? true : false;
         }
 
-        public ICollection<Campaign> GetAll()
+        public List<Campaign> GetAll()
         {
-           return  _dataContext.Campaign.ToList();
+           return  _dataContext.Campaign.Where(e=>e.Active==true).ToList();
         }
 
         public ICollection<Campaign> GetAllCampaigns(int id)

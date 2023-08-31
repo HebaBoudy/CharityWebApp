@@ -6,9 +6,9 @@ namespace WebAppTutorial.Interfaces
     public interface IDonor_CampaignRepository
     {
         bool Delete(Donor_Campaign row);
-        Donor_Campaign Get( int Campaignid); 
+        List<Donor_Campaign> Get( string title);
 
-      //  ICollection<UsersRegistration> GetAllDonors( int Campaignid);   
+        bool Insert(Donor_Campaign row);
 
     }
 }

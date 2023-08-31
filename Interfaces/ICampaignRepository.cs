@@ -4,7 +4,7 @@ namespace WebAppTutorial.Interfaces
 {
     public interface ICampaignRepository
     {
-        ICollection<Campaign> GetAll();
+        List<Campaign> GetAll();
         ICollection<Campaign> GetAllCampaigns(int ID);
         bool CreateCampain(Campaign campaign);
         Campaign GetCampaignByName(string name);

@@ -20,9 +20,17 @@ namespace WebAppTutorial.Repos
             return (deleted > 0) ? true : false;
         }
 
-        public Donor_Campaign Get(int Campaignid)
+        public List<Donor_Campaign> Get(string title)
         {
-            return _dataContext.Donor_Campaign.Where(e => e.CampaignId == Campaignid).FirstOrDefault();
+            return _dataContext.Donor_Campaign.Where(e => e.Title == title).ToList();
+        }
+
+        public bool Insert(Donor_Campaign row)
+        {
+            _dataContext.Donor_Campaign.Add(row);
+            var added = _dataContext.SaveChanges();
+            return (added > 0) ? true : false;
+
         }
 
         //public ICollection<UsersRegistration> GetAllDonors(int companyid)

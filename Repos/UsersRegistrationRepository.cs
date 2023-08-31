@@ -1,4 +1,5 @@
-﻿using WebAppTutorial.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAppTutorial.Data;
 using WebAppTutorial.Interfaces;
 using WebAppTutorial.Models;
 
@@ -46,8 +47,10 @@ namespace WebAppTutorial.Repos
             return _dataContext.UsersRegistration.Any(e => e.ID == id);
         }
 
-        public bool UpdateUserInfo(UsersRegistration user)
+        public bool UpdateUserInfo(string oldUser,UsersRegistration user)
         {
+          
+
             _dataContext.UsersRegistration.Update(user);
             var saved = _dataContext.SaveChanges();
             return (saved > 0) ? true : false;
@@ -70,5 +73,7 @@ namespace WebAppTutorial.Repos
         {
             return _dataContext.UsersRegistration.Where(e => e.UserName == userName).FirstOrDefault();
         }
+
+      
     }
 }
